@@ -5,6 +5,8 @@
 #define NUM__SHIELD_LEDS 6
 
 CRGB bodyLeds[NUM_LEDS];
+CHSV bodyLeds[NUM_LEDS];
+
 CRGB ballLeds[NUM_LEDS];
 CRGB shieldLeds[NUM_LEDS];
 
@@ -39,7 +41,6 @@ void chargePattern() {
 }
 
 void loop() {
-
     if (state1)
     {
         chargePattern();
@@ -50,3 +51,5 @@ void loop() {
 
     delay(30);
 }
+
+
