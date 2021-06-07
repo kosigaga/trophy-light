@@ -25,10 +25,9 @@ int maxNumberOfLoops = NUM__BODY_LEDS + maxValue / step;
 int chargeUpIter = 0;
 
 bool charging = true;
-bool pulse = true;
 
 CHSV blue = CHSV(160, 255, 0);
-CHSV orange = CHSV(25, 255, 0);
+// CHSV orange = CHSV(25, 255, 0);
 
 void setup() {
     //Body strips
@@ -153,9 +152,14 @@ void chargeBall(int startPoint)
     }
 }
 
-void disChargeBall(int startPoint)
+void dischargeBall(int startPoint)
 {
-    if(loopCounter < startPoint || hsv_ballLeds[0].v <= 0)
+    if(loopCounter == maxNumberOfLoops && hsv_ballLeds[0].hue == 35) {
+        pulse = true;
+        return;
+    }
+
+    if(loopCounter < startPoint)
     {
         return;
     }
@@ -179,23 +183,71 @@ void copyToCRGB()
     }
 }
 
+int maxPulsePeriodCount = 3;
+int BPM = 10;
+
+int periodTimeInMillisec = 60000/BPM;
+int periodCount = 0;
+bool pulse = true;
+bool fadingShield = false;
+CEveryNMillis timer(periodTimeInMillisec);
+uint16_t lastSinValue = 0;
+
 void loop() {
-    while(true) {
 
-        for (int index = 0; index < NUM__SHIELD_LEDS; index++) {
-            hsv_shieldLeds[index] = CHSV(160, 255, beatsin16(5, 120, 255));
+    TIMES_PER_SECOND(60) {
+
+        if(pulse) {
+            if(timer)
+            {
+                ++periodCount;
+            }
+
+            lastSinValue = beatsin16(BPM, 100, 255);
+
+            for (int index = 0; index < NUM__SHIELD_LEDS; index++) {
+                hsv_shieldLeds[index] = CHSV(160, 255, lastSinValue);
+            }
+
+            if(periodCount == maxPulsePeriodCount)
+            {
+                periodCount = 0;
+                pulse = false;
+                maxPulsePeriodCount = random(3,8);
+                fadingShield = true;
+            }
         }
+        else if(fadingShield)
+            {
+                int value = lerp16by16(lastSinValue, 0, 5);
 
-        if(charging)
+                for (int index = 0; index < NUM__SHIELD_LEDS; index++) {
+                    hsv_shieldLeds[index] = CHSV(160, 255, value);
+                }
+
+                lastSinValue = value;
+                if(value <= 10)
+                {
+                    fadingShield = false;
+                }
+            }
+            else
         {
-            chargePattern();
-            chargeBall(10);
-            delay(100);
-        } else
-        {
-            disChargePattern();
-            disChargeBall(6);
-            delay(40);
+            if(charging)
+            {
+                EVERY_N_MILLISECONDS(100)
+                {
+                    chargePattern();
+                    chargeBall(10);
+                }
+            } else
+            {
+                EVERY_N_MILLISECONDS(40)
+                {
+                    disChargePattern();
+                    dischargeBall(6);
+                }
+            }
         }
 
         copyToCRGB();
