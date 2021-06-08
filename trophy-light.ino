@@ -29,6 +29,16 @@ bool charging = true;
 CHSV blue = CHSV(160, 255, 0);
 // CHSV orange = CHSV(25, 255, 0);
 
+int maxPulsePeriodCount = 3;
+int BPM = 10;
+
+int periodTimeInMillisec = 60000/BPM;
+int periodCount = 0;
+bool pulse = true;
+bool fadingShield = false;
+CEveryNMillis timer(periodTimeInMillisec);
+uint16_t lastSinValue = 0;
+
 void setup() {
     //Body strips
     FastLED.addLeds<NEOPIXEL, 33>(bodyLeds, NUM__BODY_LEDS);
@@ -182,16 +192,6 @@ void copyToCRGB()
         shieldLeds[i] = CRGB(hsv_shieldLeds[i]);
     }
 }
-
-int maxPulsePeriodCount = 3;
-int BPM = 10;
-
-int periodTimeInMillisec = 60000/BPM;
-int periodCount = 0;
-bool pulse = true;
-bool fadingShield = false;
-CEveryNMillis timer(periodTimeInMillisec);
-uint16_t lastSinValue = 0;
 
 void loop() {
 
