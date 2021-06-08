@@ -52,8 +52,10 @@ void copyToCRGB()
 }
 
 
-int startTime = random(5,10);
-int maxNumberOfLoops = NUM__LEDS + WAVE_SIZE;
+int pauseTime = random(5,10);
+bool idle = false;
+
+int maxNumberOfLoops = NUM__LEDS;
 int loopCounter = 0;
 bool waveInProgress = true;
 
@@ -63,23 +65,20 @@ int periodTimeInMillisec = 60000/BPM;
 CEveryNMillis timer(periodTimeInMillisec);
 
 void waveEffect() {
+    for(int i = 0; i < WAVE_SIZE; ++i) {
+        hsv_leds[loopCounter + i].v = 200;
+    }
 
-    EVERY_N_SECONDS(startTime){
-        for(int i = 0; i < WAVE_SIZE; ++i) {
-            hsv_leds[loopCounter +  i].v = 200;
-        }
+    if(loopCounter > 0) {
+        hsv_leds[loopCounter-1].v = 50;
+    }
 
-        for(int i = 0; i < loopCounter-WAVE_SIZE; ++i) {
-            hsv_leds[loopCounter-WAVE_SIZE+i].v = 50;
-        }
-
-        ++loopCounter;
-        if(loopCounter == maxNumberOfLoops) {
-            loopCounter = 0;
-            pulseInProgress = true;
-            startTime = random(5,10);
-            timer.reset();
-        }
+    ++loopCounter;
+    if(loopCounter == maxNumberOfLoops) {
+        loopCounter = 0;
+        pulseInProgress = true;
+        pauseTime = random(5,10);
+        timer.reset();
     }
 }
 
@@ -107,7 +106,11 @@ void loop() {
 
             pulseEffect();
         }
-
+        if(idle) {
+            delay(pauseTime*1000);
+            idle = false;
+            waveInProgress = true;
+        }
         copyToCRGB();
         FastLED.show();
     }
