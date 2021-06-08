@@ -14,9 +14,9 @@ CHSV hsv_leds[NUM__LEDS + WAVE_SIZE];
 CRGB ex_leds[NUM__EX_LEDS];
 CHSV hsv_exLeds[NUM__EX_LEDS];
 
-CHSV blue = CHSV(90, 255, 100);
+CHSV green = CHSV(90, 255, 100);
 
-int g_brightness = 32;
+int g_brightness = 128;
 
 void setup() {
     FastLED.addLeds<NEOPIXEL, 33>(leds, NUM__LEDS);
@@ -24,7 +24,7 @@ void setup() {
 
     FastLED.setBrightness(g_brightness);
     FastLED.clear();
-    reset(blue);
+    reset(green);
 }
 
 void reset(CHSV color)
@@ -61,14 +61,15 @@ int loopCounter = 0;
 bool waveInProgress = true;
 
 bool pulseInProgress = false;
-int BPM = 100;
-int periodTimeInMillisec = 60000/BPM /2;
+int BPM = 50;
+int periodTimeInMillisec = 60000 / BPM /2;
 CEveryNMillis timer(periodTimeInMillisec);
 
 void dimTo(int value) {
-    for(int i = 0; i < NUM__LEDS; ++i){
+    for(int i = 0; i < NUM__LEDS; ++i)
+    {
         if(hsv_leds[i].v >= value) {
-            hsv_leds[i].v -= 8;
+            hsv_leds[i].v -= 5;
         }
     }
 }
@@ -76,16 +77,16 @@ void dimTo(int value) {
 void waveEffect() {
     EVERY_N_MILLISECONDS(200){
         for(int i = 0; i < WAVE_SIZE; ++i) {
-            hsv_leds[loopCounter + i].v = 200;
+            hsv_leds[loopCounter + i].v = 220;
         }
 
-        // if(loopCounter > 0) {
-        //     hsv_leds[loopCounter-1].v = 100;
-        // }
+        if(loopCounter > 0) {
+            hsv_leds[loopCounter-1].v = 100;
+        }
 
         ++loopCounter;
         if(loopCounter == maxNumberOfLoops) {
-            // hsv_leds[loopCounter-1].v = 100;
+            hsv_leds[loopCounter-1].v = 100;
             loopCounter = 0;
             waveInProgress = false;
             pulseInProgress = true;
@@ -131,6 +132,7 @@ void loop() {
             idle = false;
             waveInProgress = true;
         }
+
         copyToCRGB();
         FastLED.show();
 //    }
