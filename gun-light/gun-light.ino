@@ -86,7 +86,6 @@ void waveEffect() {
 
         ++loopCounter;
         if(loopCounter == maxNumberOfLoops) {
-            hsv_leds[loopCounter-1].v = 100;
             loopCounter = 0;
             waveInProgress = false;
             pulseInProgress = true;
