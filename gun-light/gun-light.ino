@@ -3,13 +3,13 @@
 #define NUM__LEDS 13
 #define NUM__EX_LEDS 6
 
-#define WAVE_SIZE 3;
+#define WAVE_SIZE 3
 
 #define TIMES_PER_SECOND(x) EVERY_N_MILLISECONDS(1000/x)
 #define ARRAYLENGTH(x) (sizeof(x)/sizeof(x[0]))
 
 CRGB leds[NUM__LEDS];
-CHSV hsv_Leds[NUM__LEDS + WAVE_SIZE];
+CHSV hsv_leds[NUM__LEDS + WAVE_SIZE];
 
 CRGB ex_leds[NUM__EX_LEDS];
 CHSV hsv_exLeds[NUM__EX_LEDS];
@@ -30,7 +30,7 @@ void reset(CHSV color)
 {
     for(int i = 0; i < NUM__LEDS; ++i)
     {
-        hsv_Leds[i] = color;
+        hsv_leds[i] = color;
     }
 
     for(int i = 0; i < NUM__EX_LEDS; ++i)
@@ -43,7 +43,7 @@ void copyToCRGB()
 {
     for(int i=0; i < NUM__LEDS; i++)
     {
-        leds[i] = CRGB(hsv_Leds[i]);
+        leds[i] = CRGB(hsv_leds[i]);
     }
     for(int i=0; i < NUM__EX_LEDS; i++)
     {
@@ -66,11 +66,11 @@ void waveEffect() {
 
     EVERY_N_SECONDS(startTime){
         for(int i = 0; i < WAVE_SIZE; ++i) {
-            hsv_leds[loopCounter +  i].V = 200;
+            hsv_leds[loopCounter +  i].v = 200;
         }
 
         for(int i = 0; i < loopCounter-WAVE_SIZE; ++i) {
-            hsv_leds[loopCounter-WAVE_SIZE+i] = 50;
+            hsv_leds[loopCounter-WAVE_SIZE+i].v = 50;
         }
 
         ++loopCounter;
@@ -87,7 +87,7 @@ void waveEffect() {
 void pulseEffect(){
     for(int i = 0; i < NUM__EX_LEDS; ++i)
     {
-        exLeds[i] = CHSV(160, 255, beatSin16(BPM, 50, 200));
+        hsv_exLeds[i] = CHSV(160, 255, beatsin16(BPM, 50, 200));
     }
 
     if(timer) {
@@ -107,6 +107,7 @@ void loop() {
 
             pulseEffect();
         }
+
         copyToCRGB();
         FastLED.show();
     }
