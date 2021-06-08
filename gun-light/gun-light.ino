@@ -14,7 +14,7 @@ CHSV hsv_leds[NUM__LEDS + WAVE_SIZE];
 CRGB ex_leds[NUM__EX_LEDS];
 CHSV hsv_exLeds[NUM__EX_LEDS];
 
-CHSV blue = CHSV(90, 255, 50);
+CHSV blue = CHSV(90, 255, 100);
 
 int g_brightness = 32;
 
@@ -66,20 +66,22 @@ int periodTimeInMillisec = 60000/BPM;
 CEveryNMillis timer(periodTimeInMillisec);
 
 void waveEffect() {
-    for(int i = 0; i < WAVE_SIZE; ++i) {
-        hsv_leds[loopCounter + i].v = 200;
-    }
+    EVERY_N_MILLISECONDS(200){
+        for(int i = 0; i < WAVE_SIZE; ++i) {
+            hsv_leds[loopCounter + i].v = 200;
+        }
 
-    if(loopCounter > 0) {
-        hsv_leds[loopCounter-1].v = 50;
-    }
+        if(loopCounter > 0) {
+            hsv_leds[loopCounter-1].v = 100;
+        }
 
-    ++loopCounter;
-    if(loopCounter == maxNumberOfLoops) {
-        loopCounter = 0;
-        pulseInProgress = true;
-        pauseTime = random(5,10);
-        timer.reset();
+        ++loopCounter;
+        if(loopCounter == maxNumberOfLoops) {
+            loopCounter = 0;
+            pulseInProgress = true;
+            pauseTime = random(5,10);
+            timer.reset();
+        }
     }
 }
 
@@ -87,7 +89,7 @@ void waveEffect() {
 void pulseEffect(){
     for(int i = 0; i < NUM__EX_LEDS; ++i)
     {
-        hsv_exLeds[i] = CHSV(160, 255, beatsin16(BPM, 50, 200));
+        hsv_exLeds[i] = CHSV(160, 255, beatsin16(BPM, 100, 250));
     }
 
     if(timer) {
