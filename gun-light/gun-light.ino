@@ -103,7 +103,7 @@ void pulseEffect() {
     {
         for(int i = 0; i < NUM__EX_LEDS; ++i)
         {
-            hsv_exLeds[i] = CHSV(160, 255, sin(sinValue*M_PI/180.f)*150 + 100);
+            hsv_exLeds[i] = CHSV(160, 255, sin(90 + sinValue*M_PI/180.f)*150 + 100);
         }
 
         ++sinValue;
