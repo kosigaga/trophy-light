@@ -62,7 +62,10 @@ bool waveInProgress = true;
 
 bool pulseInProgress = false;
 int BPM = 30;
-int periodTimeInMillisec = 60000 / BPM;
+int periodTimeInMillisec = 60 / BPM * 1000;
+
+int sinValue = 0;
+
 CEveryNMillis timer(periodTimeInMillisec);
 
 void dimTo(int value) {
@@ -98,13 +101,15 @@ void waveEffect() {
 void pulseEffect() {
     EVERY_N_MILLISECONDS(1)
     {
-        int value = beatsin16(BPM, 100, 250, 0, 64);
         for(int i = 0; i < NUM__EX_LEDS; ++i)
         {
-            hsv_exLeds[i] = CHSV(160, 255, value);
+            hsv_exLeds[i] = CHSV(160, 255, sin(sinValue*M_PI/180.f)*150 + 100);
         }
 
-        if(timer) {
+        ++sinValue;
+
+        if(sinValue == 180) {
+            sinValue = 0;
             pulseInProgress = false;
             pauseTime = random(5,10);
             idle = true;
