@@ -29,7 +29,7 @@ void setup() {
 
 void reset(CHSV color)
 {
-    for(int i = 0; i < NUM__LEDS; ++i)
+    for(int i = 0; i < NUM__LEDS + WAVE_SIZE; ++i)
     {
         hsv_leds[i] = color;
     }
@@ -61,12 +61,9 @@ int loopCounter = 0;
 bool waveInProgress = true;
 
 bool pulseInProgress = false;
-int BPM = 30;
-int periodTimeInMillisec = 60 / BPM * 1000;
 
 int sinValue = 0;
 
-CEveryNMillis timer(periodTimeInMillisec);
 
 void dimTo(int value) {
     for(int i = 0; i < NUM__LEDS; ++i)
@@ -93,7 +90,6 @@ void waveEffect() {
             loopCounter = 0;
             waveInProgress = false;
             pulseInProgress = true;
-            timer.reset();
         }
     }
 }
