@@ -65,6 +65,14 @@ int BPM = 100;
 int periodTimeInMillisec = 60000/BPM /2;
 CEveryNMillis timer(periodTimeInMillisec);
 
+void dimTo(int value) {
+    for(i = 0; i < NUM__LEDS; ++i){
+        if(hsv_leds[i].v >= value){
+            hsv_leds[i].v -= 20;
+        }
+    }
+}
+
 void waveEffect() {
     EVERY_N_MILLISECONDS(200){
         for(int i = 0; i < WAVE_SIZE; ++i) {
@@ -87,17 +95,19 @@ void waveEffect() {
 }
 
 void pulseEffect() {
-
-    int value = beatsin16(BPM, 100, 250);
-    for(int i = 0; i < NUM__EX_LEDS; ++i)
+    EVERY_N_MILLISECONDS(100)
     {
-        hsv_exLeds[i] = CHSV(160, 255, value);
-    }
+        int value = beatsin16(BPM, 100, 250);
+        for(int i = 0; i < NUM__EX_LEDS; ++i)
+        {
+            hsv_exLeds[i] = CHSV(160, 255, value);
+        }
 
-    if(timer) {
-        pulseInProgress = false;
-        pauseTime = random(5,10);
-        idle = true;
+        if(timer) {
+            pulseInProgress = false;
+            pauseTime = random(5,10);
+            idle = true;
+        }
     }
 }
 
