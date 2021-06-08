@@ -78,15 +78,16 @@ void waveEffect() {
         ++loopCounter;
         if(loopCounter == maxNumberOfLoops-1) {
             loopCounter = 0;
+            waveInProgress = false;
             pulseInProgress = true;
-            pauseTime = random(5,10);
-            timer.reset();\
+            timer.reset();
         }
     }
 }
 
 
-void pulseEffect(){
+void pulseEffect() {
+
     int value = beatsin16(BPM, 100, 250);
     for(int i = 0; i < NUM__EX_LEDS; ++i)
     {
@@ -95,14 +96,14 @@ void pulseEffect(){
 
     if(timer) {
         pulseInProgress = false;
-        waveInProgress = false;
+        pauseTime = random(5,10);
         idle = true;
     }
 }
 
 void loop() {
 
-    TIMES_PER_SECOND(60) {
+    //TIMES_PER_SECOND(60) {
         if(waveInProgress) {
 
             waveEffect();
@@ -118,6 +119,6 @@ void loop() {
         }
         copyToCRGB();
         FastLED.show();
-    }
+//    }
 
 }
