@@ -9,7 +9,7 @@
 #define ARRAYLENGTH(x) (sizeof(x)/sizeof(x[0]))
 
 CRGB leds[NUM__LEDS];
-CHSV hsv_leds[NUM__LEDS + WAVE_SIZE];
+CHSV hsv_leds[NUM__LEDS + WAVE_SIZE*2];
 
 CRGB ex_leds[NUM__EX_LEDS];
 CHSV hsv_exLeds[NUM__EX_LEDS];
@@ -42,9 +42,9 @@ void reset(CHSV color)
 
 void copyToCRGB()
 {
-    for(int i=0; i < NUM__LEDS; i++)
+    for(int i = 0; i < NUM__LEDS; i++)
     {
-        leds[i] = CRGB(hsv_leds[i]);
+        leds[i] = CRGB(hsv_leds[i + WAVE_SIZE]);
     }
     for(int i=0; i < NUM__EX_LEDS; i++)
     {
@@ -56,7 +56,7 @@ void copyToCRGB()
 int pauseTime = random(5,10);
 bool idle = false;
 
-int maxNumberOfLoops = NUM__LEDS;
+int maxNumberOfLoops = NUM__LEDS + WAVE_SIZE;
 int loopCounter = 0;
 bool waveInProgress = true;
 
@@ -99,7 +99,7 @@ void waveEffect() {
 }
 
 void pulseEffect() {
-    EVERY_N_MILLISECONDS(1)
+    EVERY_N_MILLISECONDS(10)
     {
         for(int i = 0; i < NUM__EX_LEDS; ++i)
         {
