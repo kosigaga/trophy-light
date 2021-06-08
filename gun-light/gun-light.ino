@@ -1,7 +1,7 @@
 #include <FastLED.h>
 
-#define NUM__LEDS 13
-#define NUM__EX_LEDS 6
+#define NUM__LEDS 10
+#define NUM__EX_LEDS 10
 
 #define WAVE_SIZE 3
 
@@ -14,12 +14,13 @@ CHSV hsv_leds[NUM__LEDS + WAVE_SIZE];
 CRGB ex_leds[NUM__EX_LEDS];
 CHSV hsv_exLeds[NUM__EX_LEDS];
 
-CHSV blue = CHSV(160, 255, 50);
+CHSV blue = CHSV(90, 255, 50);
 
 int g_brightness = 32;
 
 void setup() {
     FastLED.addLeds<NEOPIXEL, 33>(leds, NUM__LEDS);
+    FastLED.addLeds<NEOPIXEL, 32>(ex_leds, NUM__LEDS);
 
     FastLED.setBrightness(g_brightness);
     FastLED.clear();
