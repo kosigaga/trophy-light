@@ -76,25 +76,27 @@ void waveEffect() {
         }
 
         ++loopCounter;
-        if(loopCounter == maxNumberOfLoops) {
+        if(loopCounter == maxNumberOfLoops-1) {
             loopCounter = 0;
             pulseInProgress = true;
             pauseTime = random(5,10);
-            timer.reset();
+            timer.reset();\
         }
     }
 }
 
 
 void pulseEffect(){
+    int value = beatsin16(BPM, 100, 250);
     for(int i = 0; i < NUM__EX_LEDS; ++i)
     {
-        hsv_exLeds[i] = CHSV(160, 255, beatsin16(BPM, 100, 250));
+        hsv_exLeds[i] = CHSV(160, 255, value);
     }
 
     if(timer) {
         pulseInProgress = false;
-        waveInProgress = true;
+        waveInProgress = false;
+        idle = true;
     }
 }
 
@@ -110,7 +112,7 @@ void loop() {
             pulseEffect();
         }
         if(idle) {
-            delay(pauseTime*1000);
+            FastLED.delay(pauseTime*1000);
             idle = false;
             waveInProgress = true;
         }
