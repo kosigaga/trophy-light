@@ -66,9 +66,9 @@ int periodTimeInMillisec = 60000/BPM /2;
 CEveryNMillis timer(periodTimeInMillisec);
 
 void dimTo(int value) {
-    for(i = 0; i < NUM__LEDS; ++i){
-        if(hsv_leds[i].v >= value){
-            hsv_leds[i].v -= 20;
+    for(int i = 0; i < NUM__LEDS; ++i){
+        if(hsv_leds[i].v >= value) {
+            hsv_leds[i].v -= 8;
         }
     }
 }
@@ -79,13 +79,13 @@ void waveEffect() {
             hsv_leds[loopCounter + i].v = 200;
         }
 
-        if(loopCounter > 0) {
-            hsv_leds[loopCounter-1].v = 100;
-        }
+        // if(loopCounter > 0) {
+        //     hsv_leds[loopCounter-1].v = 100;
+        // }
 
         ++loopCounter;
         if(loopCounter == maxNumberOfLoops) {
-            hsv_leds[loopCounter-1].v = 100;
+            // hsv_leds[loopCounter-1].v = 100;
             loopCounter = 0;
             waveInProgress = false;
             pulseInProgress = true;
@@ -112,6 +112,10 @@ void pulseEffect() {
 }
 
 void loop() {
+
+    TIMES_PER_SECOND(25){
+        dimTo(100);
+    }
 
     //TIMES_PER_SECOND(60) {
         if(waveInProgress) {
