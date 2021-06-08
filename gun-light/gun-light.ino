@@ -96,9 +96,9 @@ void waveEffect() {
 }
 
 void pulseEffect() {
-    EVERY_N_MILLISECONDS(10)
+    EVERY_N_MILLISECONDS(1)
     {
-        int value = beatsin16(BPM, 100, 250, 0, 0);
+        int value = beatsin16(BPM, 100, 250, 0, 64);
         for(int i = 0; i < NUM__EX_LEDS; ++i)
         {
             hsv_exLeds[i] = CHSV(160, 255, value);
