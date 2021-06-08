@@ -61,8 +61,8 @@ int loopCounter = 0;
 bool waveInProgress = true;
 
 bool pulseInProgress = false;
-int BPM = 10;
-int periodTimeInMillisec = 60000/BPM;
+int BPM = 100;
+int periodTimeInMillisec = 60000/BPM /2;
 CEveryNMillis timer(periodTimeInMillisec);
 
 void waveEffect() {
@@ -76,7 +76,8 @@ void waveEffect() {
         }
 
         ++loopCounter;
-        if(loopCounter == maxNumberOfLoops-1) {
+        if(loopCounter == maxNumberOfLoops) {
+            hsv_leds[loopCounter-1].v = 100;
             loopCounter = 0;
             waveInProgress = false;
             pulseInProgress = true;
@@ -84,7 +85,6 @@ void waveEffect() {
         }
     }
 }
-
 
 void pulseEffect() {
 
