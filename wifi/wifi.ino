@@ -13,9 +13,9 @@ const char *password = "1234";
 
 WiFiServer server(80);
 
-IPAddress local_IP(192, 168, 1, 100);
+IPAddress local_IP(192, 168, 1, 130);
 IPAddress gateway(192, 168, 1, 1);
-IPAddress subnet(255, 255, 255, 0);
+IPAddress subnet(255, 255, 0, 0);
 
 CRGB leds[NUM__OF_LEDS];
 CHSV hsv_leds[NUM__OF_LEDS];
@@ -98,8 +98,8 @@ void handleClient(WiFiClient client) {
                         client.println();
 
                         // the content of the HTTP response follows the header:
-                        client.print("Click <a style=\"font-size=35rem\" href=\"/H\">here</a> to turn ON the LED.<br>");
-                        client.print("Click <a style=\"font-size=35rem\" href=\"/L\">here</a> to turn OFF the LED.<br>");
+                        client.print("Click <a style=\"font-size: 35rem;\" href=\"/H\">here</a> to turn ON the LED.<br>");
+                        client.print("Click <a style=\"font-size: 35rem;\" href=\"/L\">here</a> to turn OFF the LED.<br>");
 
                         // The HTTP response ends with another blank line:
                         client.println();
