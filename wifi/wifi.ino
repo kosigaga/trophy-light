@@ -13,7 +13,7 @@ const char *password = "1234";
 
 WiFiServer server(80);
 
-IPAddress local_IP(192, 168, 1, 184);
+IPAddress local_IP(1, 1, 1, 1);
 IPAddress gateway(192, 168, 1, 1);
 IPAddress subnet(255, 255, 0, 0);
 
@@ -72,10 +72,8 @@ void setup() {
     server.begin();
 }
 
-void loop() {
-    WiFiClient client = server.available();   // listen for incoming clients
-
-    if (client) {                             // if you get a client,
+void handleClient() {
+if (client) {                             // if you get a client,
         Serial.println("New Client.");           // print a message out the serial port
         String currentLine = "";                // make a String to hold incoming data from the client
         while (client.connected()) {            // loop while the client's connected
@@ -120,10 +118,14 @@ void loop() {
                 }
             }
         }
+}
 
-        client.stop();
+void loop() {
+    WiFiClient client = server.available();   // listen for incoming clients
 
-        copyToCRGB();
-        FastLED.show();
+    client.stop();
+
+    copyToCRGB();
+    FastLED.show();
     }
 }
