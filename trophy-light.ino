@@ -30,7 +30,7 @@ bool isBlue = true;
 CHSV blue = CHSV(160, 255, 0);
 // CHSV orange = CHSV(25, 255, 0);
 
-int maxPulsePeriodCount = 3;
+int maxPulsePeriodCount = 9;
 int sinValue = 0;
 
 bool pulse = true;
@@ -242,7 +242,7 @@ void loop() {
                 if(sinValue == maxPulsePeriodCount*180)
                 {
                     sinValue = 0;
-                    maxPulsePeriodCount = random(3,8);
+                    maxPulsePeriodCount = random(6,12);
                     pulse = false;
                     fadingShield = true;
                 }
