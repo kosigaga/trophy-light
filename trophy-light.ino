@@ -18,7 +18,7 @@ CHSV hsv_shieldLeds[NUM__SHIELD_LEDS];
 int step = 25;
 int maxValue = 225;
 
-int g_brightness = 18;
+int g_brightness = 32;
 
 int loopCounter = 0;
 int maxNumberOfLoops = NUM__BODY_LEDS + maxValue / step;
@@ -217,12 +217,12 @@ void loop() {
 
                     static int value = 100;
 
-                    for (int index = 0; index < NUM__SHIELD_LEDS; index++) {
+                    for (int index = 0; index < NUM__SHIELD_LEDS; ++index) {
                         hsv_shieldLeds[index] = CHSV(160, 255, value);
                     }
 
-                    value = lerp16by16(value, 0, 5);
-                    if(value <= 10)
+                    value -= 5;
+                    if(value <= 5)
                     {
                         value = 100;
                         fadingShield = false;
@@ -230,25 +230,24 @@ void loop() {
                 }
             }
             else
-        {
-            if(charging)
             {
-                EVERY_N_MILLISECONDS(100)
+                if(charging)
                 {
-                    chargePattern();
-                    chargeBall(10);
-                }
-            } else
-            {
-                EVERY_N_MILLISECONDS(40)
+                    EVERY_N_MILLISECONDS(100)
+                    {
+                        chargePattern();
+                        chargeBall(10);
+                    }
+                } else
                 {
-                    disChargePattern();
-                    dischargeBall(6);
+                    EVERY_N_MILLISECONDS(40)
+                    {
+                        disChargePattern();
+                        dischargeBall(6);
+                    }
                 }
             }
-       // }
 
-    }
     copyToCRGB();
     FastLED.show();
 }
