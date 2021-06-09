@@ -152,6 +152,8 @@ void dischargeBallBlue(int startPoint)
     for(int i = 0; i < NUM__BALL_LEDS; ++i)
     {
         hsv_ballLeds[i].v -= step;
+        if(hsv_ballLeds[i].v < 0)
+            hsv_ballLeds[i].v = 0;
     }
 }
 
@@ -173,6 +175,8 @@ void dischargeBallOrange(int startPoint)
     for(int i = 0; i < NUM__BALL_LEDS; ++i)
     {
         hsv_ballLeds[i].v -= step;
+        if(hsv_ballLeds[i].v < 0)
+            hsv_ballLeds[i].v = 0;
     }
 }
 
