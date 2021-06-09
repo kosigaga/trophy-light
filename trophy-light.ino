@@ -140,8 +140,8 @@ void dischargeBallBlue(int startPoint)
 {
     if(loopCounter == maxNumberOfLoops) {
         loopCounter = 0;
-        swapColor();
         isBlue = false;
+        swapColor();
         return;
     }
 
@@ -152,9 +152,12 @@ void dischargeBallBlue(int startPoint)
 
     for(int i = 0; i < NUM__BALL_LEDS; ++i)
     {
-        hsv_ballLeds[i].v -= step;
-        if(hsv_ballLeds[i].v < 0)
+        int val = hsv_ballLeds[i].v;
+        val -= step;
+        if(val < 0)
             hsv_ballLeds[i].v = 0;
+        else
+            hsv_ballLeds[i].v = val;
     }
 }
 
@@ -175,9 +178,12 @@ void dischargeBallOrange(int startPoint)
 
     for(int i = 0; i < NUM__BALL_LEDS; ++i)
     {
-        hsv_ballLeds[i].v -= step;
-        if(hsv_ballLeds[i].v < 0)
+        int val = hsv_ballLeds[i].v;
+        val -= step;
+        if(val < 0)
             hsv_ballLeds[i].v = 0;
+        else
+            hsv_ballLeds[i].v = val;
     }
 }
 
