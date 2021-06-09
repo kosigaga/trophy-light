@@ -63,21 +63,13 @@ void setup() {
 
     reset(currentColor);
 
-    Serial.begin(115200);
-    Serial.println();
-    Serial.println("Configuring access point...");
-
     if (!WiFi.config(local_IP, gateway, subnet)) {
         Serial.println("STA Failed to configure");
     }
 
     WiFi.softAP(ssid);
     IPAddress myIP = WiFi.softAPIP();
-    Serial.print("AP IP address: ");
-    Serial.println(myIP);
     server.begin();
-
-    Serial.println("Server started");
 }
 
 void loop() {
@@ -121,6 +113,7 @@ void loop() {
                     hsv_leds[0] = nextColor(currentColor);
                     currentColor++;
                 }
+
                 if (currentLine.endsWith("GET /L")) {
                     hsv_leds[0] = prevColor(currentColor);
                     currentColor--;
