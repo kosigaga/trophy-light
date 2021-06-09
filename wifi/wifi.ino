@@ -15,7 +15,7 @@ WiFiServer server(80);
 
 IPAddress local_IP(1, 2, 3, 4);
 IPAddress gateway(192, 168, 1, 1);
-IPAddress subnet(255, 0, 0, 0);
+IPAddress subnet(255, 255, 255, 0);
 
 CRGB leds[NUM__OF_LEDS];
 CHSV hsv_leds[NUM__OF_LEDS];
