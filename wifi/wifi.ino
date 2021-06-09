@@ -66,10 +66,6 @@ void setup() {
     Serial.begin(115200);
     Serial.println();
 
-    if (!WiFi.config(local_IP, gateway, subnet)) {
-        Serial.println("STA Failed to configure");
-    }
-
     WiFi.softAP(ssid);
     IPAddress myIP = WiFi.softAPIP();
     Serial.print("IP address: ");
