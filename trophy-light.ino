@@ -248,7 +248,7 @@ void loop() {
             }
        // }
 
-        copyToCRGB();
-        FastLED.show();
     }
+    copyToCRGB();
+    FastLED.show();
 }
