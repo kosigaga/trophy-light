@@ -112,7 +112,6 @@ void disChargePattern()
 
     if(loopCounter == maxNumberOfLoops)
     {
-        loopCounter = 0;
         chargeUpIter = 0;
         charging = !charging;
         swapColor();
@@ -161,6 +160,7 @@ void chargeBall(int startPoint)
 void dischargeBall(int startPoint)
 {
     if(loopCounter == maxNumberOfLoops && hsv_ballLeds[0].hue < 100) {
+        loopCounter = 0;
         pulse = true;
         return;
     }
