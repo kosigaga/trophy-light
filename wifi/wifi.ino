@@ -13,10 +13,6 @@ const char *password = "1234";
 
 WiFiServer server(80);
 
-IPAddress local_IP(192, 168, 1, 130);
-IPAddress gateway(192, 168, 1, 1);
-IPAddress subnet(255, 255, 0, 0);
-
 CRGB leds[NUM__OF_LEDS];
 CHSV hsv_leds[NUM__OF_LEDS];
 
@@ -123,7 +119,7 @@ void handleClient(WiFiClient client) {
                         currentLine = "";
                     }
                 } else if (c != '\r') {  // if you got anything else but a carriage return character,
-                currentLine += c;      // add it to the end of the currentLine
+                    currentLine += c;      // add it to the end of the currentLine
                 }
 
                 if (currentLine.endsWith("GET /CH")) {
@@ -137,12 +133,12 @@ void handleClient(WiFiClient client) {
                 }
 
                 if (currentLine.endsWith("GET /BH")) {
-                    if(g_brightness >= maxBrightness)
+                    if(g_brightness <= maxBrightness)
                         g_brightness += step;
                 }
 
                 if (currentLine.endsWith("GET /BL")) {
-                    if(g_brightness <= minBrightness)
+                    if(g_brightness >= minBrightness)
                         g_brightness -= step;
                 }
             }
