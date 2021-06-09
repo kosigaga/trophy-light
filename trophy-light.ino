@@ -213,7 +213,7 @@ void loop() {
         }
         else if(fadingShield)
             {
-                EVERY_N_MILLISECONDS(100) {
+                EVERY_N_MILLISECONDS(1) {
 
                     static int value = 100;
 
