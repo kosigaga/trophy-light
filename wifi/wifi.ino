@@ -97,10 +97,21 @@ void handleClient(WiFiClient client) {
                         client.println("Content-type:text/html");
                         client.println();
 
-                        // the content of the HTTP response follows the header:
-                        client.print("Click <a style=\"font-size: 35rem;\" href=\"/H\">here</a> to turn ON the LED.<br>");
-                        client.print("Click <a style=\"font-size: 35rem;\" href=\"/L\">here</a> to turn OFF the LED.<br>");
+                        client.print("<div style=\"position: relative; max-width: 900px; margin-left: auto; margin-right: auto; background-color: #f7f7f7; box-sizing: border-box; \">");
+                            client.print("<div style=\"display: flex; flex-direction: column; align-items: center; font-size: 16rem;\">");
 
+                                client.print("<div style=\"width: 50%; display: flex; flex-direction: column; align-items: baseline;\">");
+                                    client.print("<p>Color <a href=\"/CH\">_UP_</a> </p>");
+                                    client.print("<p>Color <a href=\"/CL\">DOWN</a> </p>");
+                                client.print("</div>");
+
+                                client.print("<div style=\"width: 50%; display: flex; flex-direction: column; align-items: baseline;\">");
+                                    client.print("<p>Brightness <a href=\"/BH\">_UP_</a> </p>");
+                                    client.print("<p>Brightness <a href=\"/BL\">DOWN</a> </p>");
+                                client.print("</div>");
+
+                            client.print("</div>");
+                        client.print("</div>");
                         // The HTTP response ends with another blank line:
                         client.println();
                         // break out of the while loop:
@@ -112,15 +123,24 @@ void handleClient(WiFiClient client) {
                 currentLine += c;      // add it to the end of the currentLine
                 }
 
-                // Check to see if the client request was "GET /H" or "GET /L":
-                if (currentLine.endsWith("GET /H")) {
+                if (currentLine.endsWith("GET /CH")) {
                     hsv_leds[0] = nextColor(currentColor);
                     currentColor++;
                 }
 
-                if (currentLine.endsWith("GET /L")) {
+                if (currentLine.endsWith("GET /CL")) {
                     hsv_leds[0] = prevColor(currentColor);
                     currentColor--;
+                }
+
+                if (currentLine.endsWith("GET /BH")) {
+
+                    g_brightness += 16;
+                }
+
+                if (currentLine.endsWith("GET /BL")) {
+
+                    g_brightness -= 16;
                 }
             }
         }
@@ -133,5 +153,6 @@ void loop() {
     client.stop();
 
     copyToCRGB();
+    FastLED.setBrightness(g_brightness);
     FastLED.show();
 }
