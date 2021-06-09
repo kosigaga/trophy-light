@@ -102,7 +102,6 @@ void chargePattern()
 void chargeBall(int startPoint)
 {
     if(hsv_ballLeds[0].v >= maxValue) {
-        hsv_ballLeds[0].v = maxValue;
         return;
     }
 
@@ -114,6 +113,8 @@ void chargeBall(int startPoint)
     for(int i = 0; i < NUM__BALL_LEDS; ++i)
     {
         hsv_ballLeds[i].v += step;
+        if(hsv_ballLeds[i].v > maxValue)
+            hsv_ballLeds[i].v = maxValue;
     }
 }
 
