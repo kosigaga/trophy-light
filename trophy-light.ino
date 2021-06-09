@@ -160,7 +160,7 @@ void chargeBall(int startPoint)
 
 void dischargeBall(int startPoint)
 {
-    if(loopCounter == maxNumberOfLoops && hsv_ballLeds[0].hue == 35) {
+    if(loopCounter == maxNumberOfLoops && hsv_ballLeds[0].hue < 100) {
         pulse = true;
         return;
     }
