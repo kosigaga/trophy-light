@@ -63,6 +63,10 @@ void setup() {
 
     reset(currentColor);
 
+    // Serial port for debugging purposes
+    Serial.begin(115200);
+    Serial.println();
+
     if (!WiFi.config(local_IP, gateway, subnet)) {
         Serial.println("STA Failed to configure");
     }
