@@ -99,6 +99,24 @@ void chargePattern()
     }
 }
 
+void chargeBall(int startPoint)
+{
+    if(hsv_ballLeds[0].v >= maxValue) {
+        hsv_ballLeds[0].v = maxValue;
+        return;
+    }
+
+    if(loopCounter < startPoint)
+    {
+        return;
+    }
+
+    for(int i = 0; i < NUM__BALL_LEDS; ++i)
+    {
+        hsv_ballLeds[i].v += step;
+    }
+}
+
 void dischargePattern()
 {
     disChargeRowUntilIter(chargeUpIter);
@@ -117,51 +135,13 @@ void dischargePattern()
     }
 }
 
-void disChargeRowUntilIter(int iter)
-{
-    for(int i = 0; i < iter; ++i)
-    {
-        if(hsv_bodyLeds[i].v > 0)
-        {
-            hsv_bodyLeds[i].v -= step;
-        }
-    }
-}
-
-void swapColor() {
-    static int diff = -125;
-    for(int i = 0; i < NUM__BODY_LEDS; ++i)
-    {
-        hsv_bodyLeds[i].hue += diff;
-    }
-
-    for(int i = 0; i < NUM__BALL_LEDS; ++i)
-    {
-        hsv_ballLeds[i].hue += diff;
-    }
-
-    diff *= -1;
-}
-
-void chargeBall(int startPoint)
-{
-    if(loopCounter < startPoint || hsv_ballLeds[0].v >= maxValue)
-    {
-        return;
-    }
-
-    for(int i = 0; i < NUM__BALL_LEDS; ++i)
-    {
-        hsv_ballLeds[i].v += step;
-    }
-}
-
 void dischargeBallBlue(int startPoint)
 {
     if(loopCounter == maxNumberOfLoops) {
         loopCounter = 0;
         swapColor();
         isBlue = false;
+        return;
     }
 
     if(loopCounter < startPoint)
@@ -180,8 +160,8 @@ void dischargeBallOrange(int startPoint)
     if(loopCounter == maxNumberOfLoops) {
         loopCounter = 0;
         pulse = true;
-        swapColor();
         isBlue = true;
+        swapColor();
         return;
     }
 
@@ -193,6 +173,17 @@ void dischargeBallOrange(int startPoint)
     for(int i = 0; i < NUM__BALL_LEDS; ++i)
     {
         hsv_ballLeds[i].v -= step;
+    }
+}
+
+void disChargeRowUntilIter(int iter)
+{
+    for(int i = 0; i < iter; ++i)
+    {
+        if(hsv_bodyLeds[i].v > 0)
+        {
+            hsv_bodyLeds[i].v -= step;
+        }
     }
 }
 
@@ -212,12 +203,27 @@ void copyToCRGB()
     }
 }
 
+void swapColor() {
+    static int diff = -125;
+    for(int i = 0; i < NUM__BODY_LEDS; ++i)
+    {
+        hsv_bodyLeds[i].hue += diff;
+    }
+
+    for(int i = 0; i < NUM__BALL_LEDS; ++i)
+    {
+        hsv_ballLeds[i].hue += diff;
+    }
+
+    diff *= -1;
+}
+
 void loop() {
 
    // TIMES_PER_SECOND(60) {
 
         if(pulse) {
-            EVERY_N_MILLISECONDS(10){
+            EVERY_N_MILLISECONDS(20){
                 for (int index = 0; index < NUM__SHIELD_LEDS; index++) {
                     hsv_shieldLeds[index] = CHSV(160, 255, fabs(sin(sinValue*M_PI/180.)) * 150 + 100);
                 }
@@ -264,7 +270,7 @@ void loop() {
                         EVERY_N_MILLISECONDS(40)
                         {
                             dischargePattern();
-                            dischargeBallBlue(6);
+                            dischargeBallBlue(8);
                         }
                     }
                 } else {
@@ -280,7 +286,7 @@ void loop() {
                         EVERY_N_MILLISECONDS(40)
                         {
                             dischargePattern();
-                            dischargeBallOrange(6);
+                            dischargeBallOrange(8);
                         }
                     }
                 }
