@@ -4,7 +4,8 @@
 #include <WiFiClient.h>
 #include <WiFiAP.h>
 
-// #define LED_BUILTIN 2 // Set the GPIO pin where you connected your test LED or comment this line out if your dev board has a built-in LED
+#define NUM__OF_LEDS 4
+#define NUM__COLORS 3
 
 // Set these to your desired credentials.
 const char *ssid = "dva";
@@ -16,22 +17,17 @@ IPAddress local_IP(192, 168, 1, 184);
 IPAddress gateway(192, 168, 1, 1);
 IPAddress subnet(255, 255, 0, 0);
 
-#define NUM__LEDS 4
-#define NUM__COLORS 3
-CRGB leds[NUM__LEDS];
-CHSV hsv_leds[NUM_LEDS];
+CRGB leds[NUM__OF_LEDS];
+CHSV hsv_leds[NUM__OF_LEDS];
 
 CHSV colors[NUM__COLORS];
-colors[0] = CHSV(30, 255, 200);
-colors[1] = CHSV(90, 255, 200);
-colors[2] = CHSV(160, 255, 200);
-int currentColor = 0;
 
+int currentColor = 0;
 int g_brightness = 32;
 
 void copyToCRGB()
 {
-    for(int i=0; i < NUM__LEDS; i++)
+    for(int i=0; i < NUM__OF_LEDS; i++)
     {
         leds[i] = CRGB(hsv_leds[i]);
     }
@@ -39,15 +35,28 @@ void copyToCRGB()
 
 void reset(int currentColorIndex)
 {
-    for(int i = 0; i < NUM__LEDS; ++i)
+    colors[0] = CHSV(30, 255, 200);
+    colors[1] = CHSV(90, 255, 200);
+    colors[2] = CHSV(160, 255, 200);
+
+    for(int i = 0; i < NUM__OF_LEDS; ++i)
     {
         hsv_leds[i] = colors[currentColorIndex];
     }
 }
 
+CHSV nextColor(int currentColorIndex) {
+    int nextColorIndex = ++currentColorIndex % 3;
+    return colors[nextColorIndex];
+}
+
+CHSV prevColor(int currentColorIndex) {
+    int prevColorIndex = --currentColorIndex % 3;
+    return colors[prevColorIndex];
+}
+
 void setup() {
-    FastLED.addLeds<NEOPIXEL, 33>(leds, NUM__LEDS);
-    FastLED.addLeds<NEOPIXEL, 32>(ex_leds, NUM__LEDS);
+    FastLED.addLeds<NEOPIXEL, 33>(leds, NUM__OF_LEDS);
 
     FastLED.setBrightness(g_brightness);
     FastLED.clear();
@@ -109,14 +118,12 @@ void loop() {
 
                 // Check to see if the client request was "GET /H" or "GET /L":
                 if (currentLine.endsWith("GET /H")) {
-                    hsv_leds[0] = reset(++currentColor);
-                    hsv_leds[1] = reset(++currentColor);
-                    hsv_leds[2] = reset(++currentColor);
+                    hsv_leds[0] = nextColor(currentColor);
+                    currentColor++;
                 }
                 if (currentLine.endsWith("GET /L")) {
-                    hsv_leds[0] = reset(--currentColor);
-                    hsv_leds[1] = reset(--currentColor);
-                    hsv_leds[2] = reset(--currentColor);
+                    hsv_leds[0] = prevColor(currentColor);
+                    currentColor--;
                 }
             }
         }
