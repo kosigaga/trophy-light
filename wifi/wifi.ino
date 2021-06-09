@@ -118,6 +118,7 @@ void handleClient(WiFiClient client) {
                 }
             }
         }
+    }
 }
 
 void loop() {
@@ -127,5 +128,4 @@ void loop() {
 
     copyToCRGB();
     FastLED.show();
-    }
 }
