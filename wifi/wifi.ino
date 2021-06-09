@@ -24,6 +24,8 @@ CHSV colors[NUM__COLORS];
 
 int currentColor = 0;
 int g_brightness = 32;
+int minBrightness = 16;
+int maxBrightness = 208;
 
 void copyToCRGB()
 {
@@ -134,13 +136,13 @@ void handleClient(WiFiClient client) {
                 }
 
                 if (currentLine.endsWith("GET /BH")) {
-
-                    g_brightness += 16;
+                    if(maxBrightness - g_brightness >= 16)
+                        g_brightness += 16;
                 }
 
                 if (currentLine.endsWith("GET /BL")) {
-
-                    g_brightness -= 16;
+                    if(g_brightness - minBrightness <= 16)
+                        g_brightness -= 16;
                 }
             }
         }
