@@ -72,8 +72,8 @@ void setup() {
     server.begin();
 }
 
-void handleClient() {
-if (client) {                             // if you get a client,
+void handleClient(WiFiClient client) {
+    if (client) {                             // if you get a client,
         Serial.println("New Client.");           // print a message out the serial port
         String currentLine = "";                // make a String to hold incoming data from the client
         while (client.connected()) {            // loop while the client's connected
@@ -122,7 +122,7 @@ if (client) {                             // if you get a client,
 
 void loop() {
     WiFiClient client = server.available();   // listen for incoming clients
-
+    handleClient(client);
     client.stop();
 
     copyToCRGB();
