@@ -271,33 +271,33 @@ void loop() {
                 if(isBlue) {
                     if(charging)
                     {
-                        EVERY_N_MILLISECONDS(100)
+                        EVERY_N_MILLISECONDS(90)
                         {
                             chargePattern();
                             chargeBall(10);
                         }
                     } else
                     {
-                        EVERY_N_MILLISECONDS(40)
+                        EVERY_N_MILLISECONDS(50)
                         {
                             dischargePattern();
-                            dischargeBallBlue(8);
+                            dischargeBallBlue(9);
                         }
                     }
                 } else {
                     if(charging)
                     {
-                        EVERY_N_MILLISECONDS(100)
+                        EVERY_N_MILLISECONDS(90)
                         {
                             chargePattern();
                             chargeBall(10);
                         }
                     } else
                     {
-                        EVERY_N_MILLISECONDS(40)
+                        EVERY_N_MILLISECONDS(50)
                         {
                             dischargePattern();
-                            dischargeBallOrange(8);
+                            dischargeBallOrange(9);
                         }
                     }
                 }
