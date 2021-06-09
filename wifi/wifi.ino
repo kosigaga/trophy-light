@@ -13,7 +13,7 @@ const char *password = "1234";
 
 WiFiServer server(80);
 
-IPAddress local_IP(1, 2, 3, 4);
+IPAddress local_IP(192, 168, 1, 100);
 IPAddress gateway(192, 168, 1, 1);
 IPAddress subnet(255, 255, 255, 0);
 
