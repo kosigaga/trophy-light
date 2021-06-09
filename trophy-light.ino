@@ -197,7 +197,7 @@ void loop() {
    // TIMES_PER_SECOND(60) {
 
         if(pulse) {
-            EVERY_N_MILLISECONDS(100){
+            EVERY_N_MILLISECONDS(10){
                 for (int index = 0; index < NUM__SHIELD_LEDS; index++) {
                     hsv_shieldLeds[index] = CHSV(160, 255, fabs(sin(sinValue*M_PI/180.)) * 150 + 100);
                 }
