@@ -30,14 +30,10 @@ CHSV blue = CHSV(160, 255, 0);
 // CHSV orange = CHSV(25, 255, 0);
 
 int maxPulsePeriodCount = 3;
-int BPM = 10;
+int sinValue = 0;
 
-int periodTimeInMillisec = 60000/BPM;
-int periodCount = 0;
 bool pulse = true;
 bool fadingShield = false;
-CEveryNMillis timer(periodTimeInMillisec);
-uint16_t lastSinValue = 0;
 
 void setup() {
     //Body strips
@@ -48,7 +44,7 @@ void setup() {
     //Ball strips
     FastLED.addLeds<NEOPIXEL, 27>(ballLeds, NUM__BALL_LEDS);
 
-    //Shild strips
+    //Shield strips
     FastLED.addLeds<NEOPIXEL, 25>(shieldLeds, NUM__SHIELD_LEDS);
 
     FastLED.setBrightness(g_brightness);
@@ -182,53 +178,55 @@ void dischargeBall(int startPoint)
 
 void copyToCRGB()
 {
-    for(int i=0; i<NUM__BODY_LEDS; i++){
+    for(int i=0; i < NUM__BODY_LEDS; i++)
+    {
         bodyLeds[i] = CRGB(hsv_bodyLeds[i]);
     }
-    for(int i=0; i<NUM__BALL_LEDS; i++){
+    for(int i=0; i < NUM__BALL_LEDS; i++)
+    {
         ballLeds[i] = CRGB(hsv_ballLeds[i]);
     }
-    for(int i=0; i<NUM__SHIELD_LEDS; i++){
+    for(int i=0; i < NUM__SHIELD_LEDS; i++)
+    {
         shieldLeds[i] = CRGB(hsv_shieldLeds[i]);
     }
 }
 
 void loop() {
 
-    TIMES_PER_SECOND(60) {
+   // TIMES_PER_SECOND(60) {
 
         if(pulse) {
-            if(timer)
-            {
-                ++periodCount;
-            }
-
-            lastSinValue = beatsin16(BPM, 100, 255);
-
-            for (int index = 0; index < NUM__SHIELD_LEDS; index++) {
-                hsv_shieldLeds[index] = CHSV(160, 255, lastSinValue);
-            }
-
-            if(periodCount == maxPulsePeriodCount)
-            {
-                periodCount = 0;
-                pulse = false;
-                maxPulsePeriodCount = random(3,8);
-                fadingShield = true;
+            EVERY_N_MILLISECONDS(100){
+                for (int index = 0; index < NUM__SHIELD_LEDS; index++) {
+                    hsv_shieldLeds[index] = CHSV(160, 255, fabs(sin(sinValue*M_PI/180.)) * 150 + 100);
+                }
+                ++sinValue;
+                if(sinValue == maxPulsePeriodCount*180)
+                {
+                    sinValue = 0;
+                    maxPulsePeriodCount = random(3,8);
+                    pulse = false;
+                    fadingShield = true;
+                }
             }
         }
         else if(fadingShield)
             {
-                int value = lerp16by16(lastSinValue, 0, 5);
+                EVERY_N_MILLISECONDS(100) {
 
-                for (int index = 0; index < NUM__SHIELD_LEDS; index++) {
-                    hsv_shieldLeds[index] = CHSV(160, 255, value);
-                }
+                    static int value = 100;
 
-                lastSinValue = value;
-                if(value <= 10)
-                {
-                    fadingShield = false;
+                    for (int index = 0; index < NUM__SHIELD_LEDS; index++) {
+                        hsv_shieldLeds[index] = CHSV(160, 255, value);
+                    }
+
+                    value = lerp16by16(value, 0, 5);
+                    if(value <= 10)
+                    {
+                        value = 100;
+                        fadingShield = false;
+                    }
                 }
             }
             else
@@ -248,7 +246,7 @@ void loop() {
                     dischargeBall(6);
                 }
             }
-        }
+       // }
 
         copyToCRGB();
         FastLED.show();
