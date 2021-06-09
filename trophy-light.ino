@@ -25,6 +25,7 @@ int maxNumberOfLoops = NUM__BODY_LEDS + maxValue / step;
 int chargeUpIter = 0;
 
 bool charging = true;
+bool isBlue = true;
 
 CHSV blue = CHSV(160, 255, 0);
 // CHSV orange = CHSV(25, 255, 0);
@@ -79,7 +80,6 @@ void chargeRowUntilIter(int iter)
     }
 }
 
-
 void chargePattern()
 {
     chargeRowUntilIter(chargeUpIter);
@@ -99,7 +99,7 @@ void chargePattern()
     }
 }
 
-void disChargePattern()
+void dischargePattern()
 {
     disChargeRowUntilIter(chargeUpIter);
 
@@ -115,8 +115,8 @@ void disChargePattern()
         chargeUpIter = 0;
         charging = !charging;
     }
-
 }
+
 void disChargeRowUntilIter(int iter)
 {
     for(int i = 0; i < iter; ++i)
@@ -156,12 +156,32 @@ void chargeBall(int startPoint)
     }
 }
 
-void dischargeBall(int startPoint)
+void dischargeBallBlue(int startPoint)
 {
-    if(loopCounter == maxNumberOfLoops && hsv_ballLeds[5].hue < 70) {
+    if(loopCounter == maxNumberOfLoops) {
+        loopCounter = 0;
         swapColor();
+        isBlue = false;
+    }
+
+    if(loopCounter < startPoint)
+    {
+        return;
+    }
+
+    for(int i = 0; i < NUM__BALL_LEDS; ++i)
+    {
+        hsv_ballLeds[i].v -= step;
+    }
+}
+
+void dischargeBallOrange(int startPoint)
+{
+    if(loopCounter == maxNumberOfLoops) {
         loopCounter = 0;
         pulse = true;
+        swapColor();
+        isBlue = true;
         return;
     }
 
@@ -231,19 +251,37 @@ void loop() {
             }
             else
             {
-                if(charging)
-                {
-                    EVERY_N_MILLISECONDS(100)
+                if(isBlue) {
+                    if(charging)
                     {
-                        chargePattern();
-                        chargeBall(10);
+                        EVERY_N_MILLISECONDS(100)
+                        {
+                            chargePattern();
+                            chargeBall(10);
+                        }
+                    } else
+                    {
+                        EVERY_N_MILLISECONDS(40)
+                        {
+                            dischargePattern();
+                            dischargeBallBlue(6);
+                        }
                     }
-                } else
-                {
-                    EVERY_N_MILLISECONDS(40)
+                } else {
+                    if(charging)
                     {
-                        disChargePattern();
-                        dischargeBall(6);
+                        EVERY_N_MILLISECONDS(100)
+                        {
+                            chargePattern();
+                            chargeBall(10);
+                        }
+                    } else
+                    {
+                        EVERY_N_MILLISECONDS(40)
+                        {
+                            dischargePattern();
+                            dischargeBallOrange(6);
+                        }
                     }
                 }
             }
