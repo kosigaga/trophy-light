@@ -4,8 +4,8 @@
 #include <WiFiClient.h>
 #include <WiFiAP.h>
 
-#define NUM__LEDS 10
-#define NUM__EX_LEDS 10
+#define NUM__LEDS 13
+#define NUM__EX_LEDS 1
 #define NUM__COLORS 8
 
 #define WAVE_SIZE 3
@@ -59,7 +59,7 @@ void reset(CHSV color){
 
 void setup() {
     FastLED.addLeds<NEOPIXEL, 27>(leds, NUM__LEDS);
-    FastLED.addLeds<NEOPIXEL, 25>(ex_leds, NUM__LEDS);
+    FastLED.addLeds<NEOPIXEL, 25>(ex_leds, NUM__EX_LEDS);
 
     FastLED.setBrightness(g_brightness);
     FastLED.clear();
@@ -72,8 +72,6 @@ void setup() {
     running = true;
     server.begin();
 }
-
-#pragma region httpServer
 
 CHSV nextColor() {
     currentColor = ++currentColor % NUM__COLORS;
@@ -157,8 +155,6 @@ void handleClient(WiFiClient client) {
     }
 }
 
-#pragma endregion
-
 void copyToCRGB()
 {
     for(int i = 0; i < NUM__LEDS; i++)
@@ -231,13 +227,13 @@ void pulseEffect() {
 }
 
 void loop() {
-    // if(running && millis() > 1 * 60 * 1000) {
-    //     shutDown();
-    // }
+    if(running && millis() > 1 * 60 * 1000) {
+        shutDown();
+    }
 
-    // WiFiClient client = server.available();   // listen for incoming clients
-    // handleClient(client);
-    // client.stop();
+    WiFiClient client = server.available();   // listen for incoming clients
+    handleClient(client);
+    client.stop();
 
     if(waveInProgress) {
         waveEffect();
