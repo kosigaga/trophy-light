@@ -30,7 +30,7 @@ int step = 32;
 bool running = false;
 
 const char *ssid = "dva";
-const char *password = "1234";
+// const char *password = "1234";
 
 WiFiServer server(80);
 
@@ -108,8 +108,7 @@ void handleClient(WiFiClient client) {
                         client.println("Content-type:text/html");
                         client.println();
 
-
-                        client.print("<div style=\"display: flex; flex-direction: column; align-items: center; font-size: 6.5 rem;\">");
+                        client.print("<div style=\"display: flex; flex-direction: column; align-items: center; font-size: 16 rem;\">");
                             client.print("<div style=\"width: 100%; display: flex; flex-direction: column; align-items: center;\">");
                                 client.print("<p>Color <a href=\"/CH\">_UP_</a> </p>");
                                 client.print("<p>Color <a href=\"/CL\">DOWN</a> </p>");
@@ -228,9 +227,9 @@ void pulseEffect() {
 int MyTimeCounter = 0;
 void loop()
 {
-    // if(running && millis() > 3 * 60 * 1000) {
-    //     shutDown();
-    // }
+    if(running && millis() > 3 * 60 * 1000) {
+        shutDown();
+    }
 
     WiFiClient client = server.available();   // listen for incoming clients
     handleClient(client);
@@ -244,11 +243,11 @@ void loop()
         pulseEffect();
     }
 
-    EVERY_N_MILLISECONDS(10) {
+    EVERY_N_MILLISECONDS(50) {
         if(idle) {
-            MyTimeCounter += 10;
+            MyTimeCounter += 50;
             if(MyTimeCounter >= pauseTime*1000) {
-                MyTimeCounter = 0;
+                MyTimeCounter = 0É
                 idle = false;
                 waveInProgress = true;
             }
