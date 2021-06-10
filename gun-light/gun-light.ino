@@ -46,7 +46,7 @@ void createColors() {
 }
 
 void reset(CHSV color){
-    for(int i = 0; i < NUM__LEDS; ++i)
+    for(int i = 0; i < NUM__LEDS + WAVE_SIZE * 2; ++i)
     {
         hsv_leds[i] = color;
     }
@@ -108,7 +108,7 @@ void handleClient(WiFiClient client) {
                         client.println("Content-type:text/html");
                         client.println();
 
-                        client.print("<div style=\"position: relative; max-width: 900px; margin-left: auto; margin-right: auto; background-color: #f7f7f7; box-sizing: border-box; \">");
+
                             client.print("<div style=\"display: flex; flex-direction: column; align-items: center; font-size: 6.5 rem;\">");
 
                                 client.print("<div style=\"width: 100%; display: flex; flex-direction: column; align-items: center;\">");
@@ -122,7 +122,7 @@ void handleClient(WiFiClient client) {
                                 client.print("</div>");
 
                             client.print("</div>");
-                        client.print("</div>");
+
                         // The HTTP response ends with another blank line:
                         client.println();
                         // break out of the while loop:
@@ -231,9 +231,9 @@ void pulseEffect() {
 
 void loop()
 {
-    if(running && millis() > 1 * 60 * 1000) {
-        shutDown();
-    }
+    // if(running && millis() > 3 * 60 * 1000) {
+    //     shutDown();
+    // }
 
     WiFiClient client = server.available();   // listen for incoming clients
     handleClient(client);
