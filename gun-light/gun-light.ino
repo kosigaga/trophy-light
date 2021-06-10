@@ -85,6 +85,7 @@ CHSV prevColor() {
 
 void shutDown() {
     server.end();
+    WiFi.mode(WIFI_OFF);
     running = false;
 }
 
@@ -134,11 +135,13 @@ void handleClient(WiFiClient client) {
                 }
 
                 if (currentLine.endsWith("GET /CH")) {
-                    reset(nextColor());
+                    CHSV color = nextColor();
+                    reset(color);
                 }
 
                 if (currentLine.endsWith("GET /CL")) {
-                    reset(prevColor());
+                    CHSV color = prevColor();
+                    reset(color);
                 }
 
                 if (currentLine.endsWith("GET /BH")) {
@@ -191,7 +194,7 @@ void dimTo(int value) {
 void waveEffect() {
     EVERY_N_MILLISECONDS(200) {
         for(int i = 0; i < WAVE_SIZE; ++i) {
-            hsv_leds[loopCounter + i].v = 220;
+            hsv_leds[loopCounter + i].v = 225;
         }
 
         if(loopCounter > 0) {
@@ -226,8 +229,9 @@ void pulseEffect() {
     }
 }
 
-void loop() {
-    if(running && millis() > 1 * 60 * 1000) {
+void loop()
+{
+    if(running && millis() > 3 * 60 * 1000) {
         shutDown();
     }
 
