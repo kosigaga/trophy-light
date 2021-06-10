@@ -142,12 +142,12 @@ void handleClient(WiFiClient client) {
                 }
 
                 if (currentLine.endsWith("GET /BH")) {
-                    if(g_brightness <= maxBrightness)
+                    if(g_brightness < maxBrightness)
                         g_brightness += step;
                 }
 
                 if (currentLine.endsWith("GET /BL")) {
-                    if(g_brightness >= minBrightness)
+                    if(g_brightness > minBrightness)
                         g_brightness -= step;
                 }
             }
