@@ -45,6 +45,18 @@ void createColors() {
     colors[7] = CHSV(224, 255, 225);
 }
 
+void reset(CHSV color){
+    for(int i = 0; i < NUM__LEDS; ++i)
+    {
+        hsv_leds[i] = color;
+    }
+
+    for(int i = 0; i < NUM__EX_LEDS; ++i)
+    {
+        hsv_exLeds[i] = color;
+    }
+}
+
 void setup() {
     FastLED.addLeds<NEOPIXEL, 27>(leds, NUM__LEDS);
     FastLED.addLeds<NEOPIXEL, 25>(ex_leds, NUM__LEDS);
@@ -147,18 +159,6 @@ void handleClient(WiFiClient client) {
 
 #pragma endregion
 
-void reset(CHSV color){
-    for(int i = 0; i < NUM__LEDS; ++i)
-    {
-        hsv_leds[i] = color;
-    }
-
-    for(int i = 0; i < NUM__EX_LEDS; ++i)
-    {
-        hsv_exLeds[i] = color;
-    }
-}
-
 void copyToCRGB()
 {
     for(int i = 0; i < NUM__LEDS; i++)
@@ -216,7 +216,7 @@ void pulseEffect() {
     {
         for(int i = 0; i < NUM__EX_LEDS; ++i)
         {
-            hsv_exLeds[i].v = sin(sinValue*M_PI/180.f)*150 + 100;
+            hsv_exLeds[i].v = sin(sinValue*M_PI/180.f) * 150 + 100;
         }
 
         ++sinValue;
@@ -231,13 +231,13 @@ void pulseEffect() {
 }
 
 void loop() {
-    if(running && millis() > 1 * 60 * 1000) {
-        shutDown();
-    }
+    // if(running && millis() > 1 * 60 * 1000) {
+    //     shutDown();
+    // }
 
-    WiFiClient client = server.available();   // listen for incoming clients
-    handleClient(client);
-    client.stop();
+    // WiFiClient client = server.available();   // listen for incoming clients
+    // handleClient(client);
+    // client.stop();
 
     if(waveInProgress) {
         waveEffect();
