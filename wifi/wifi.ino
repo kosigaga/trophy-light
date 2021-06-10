@@ -5,7 +5,7 @@
 #include <WiFiAP.h>
 
 #define NUM__OF_LEDS 4
-#define NUM__COLORS 3
+#define NUM__COLORS 8
 
 // Set these to your desired credentials.
 const char *ssid = "dva";
@@ -19,9 +19,9 @@ CHSV hsv_leds[NUM__OF_LEDS];
 CHSV colors[NUM__COLORS];
 
 int currentColor = 0;
-int g_brightness = 16;
+int g_brightness = 144;
 int minBrightness = 16;
-int maxBrightness = 208;
+int maxBrightness = 240;
 int step = 32;
 
 void copyToCRGB()
@@ -32,15 +32,20 @@ void copyToCRGB()
     }
 }
 
-void reset(int currentColorIndex)
+void reset()
 {
-    colors[0] = CHSV(30, 255, 200);
-    colors[1] = CHSV(90, 255, 200);
-    colors[2] = CHSV(160, 255, 200);
+    colors[0] = CHSV(0, 255, 225);
+    colors[1] = CHSV(32, 255, 225);
+    colors[2] = CHSV(64, 255, 225);
+    colors[3] = CHSV(96, 255, 225);
+    colors[4] = CHSV(128, 255, 225);
+    colors[5] = CHSV(160, 255, 225);
+    colors[6] = CHSV(192, 255, 225);
+    colors[7] = CHSV(224, 255, 225);
 
     for(int i = 0; i < NUM__OF_LEDS; ++i)
     {
-        hsv_leds[i] = colors[currentColorIndex];
+        hsv_leds[i] = colors[currentColor];
     }
 }
 
@@ -60,7 +65,7 @@ void setup() {
     FastLED.setBrightness(g_brightness);
     FastLED.clear();
 
-    reset(currentColor);
+    reset();
 
     // Serial port for debugging purposes
     Serial.begin(115200);
@@ -93,14 +98,14 @@ void handleClient(WiFiClient client) {
                         client.println();
 
                         client.print("<div style=\"position: relative; max-width: 900px; margin-left: auto; margin-right: auto; background-color: #f7f7f7; box-sizing: border-box; \">");
-                            client.print("<div style=\"display: flex; flex-direction: column; align-items: center; font-size: 3 rem;\">");
+                            client.print("<div style=\"display: flex; flex-direction: column; align-items: center; font-size: 6.5 rem;\">");
 
-                                client.print("<div style=\"width: 70%; display: flex; flex-direction: column; align-items: baseline;\">");
+                                client.print("<div style=\"width: 100%; display: flex; flex-direction: column; align-items: center;\">");
                                     client.print("<p>Color <a href=\"/CH\">_UP_</a> </p>");
                                     client.print("<p>Color <a href=\"/CL\">DOWN</a> </p>");
                                 client.print("</div>");
 
-                                client.print("<div style=\"width: 70%; display: flex; flex-direction: column; align-items: baseline;\">");
+                                client.print("<div style=\"width: 100%; display: flex; flex-direction: column; align-items: center;\">");
                                     client.print("<p>Brightness <a href=\"/BH\">_UP_</a> </p>");
                                     client.print("<p>Brightness <a href=\"/BL\">DOWN</a> </p>");
                                 client.print("</div>");
