@@ -247,7 +247,7 @@ void loop()
         if(idle) {
             MyTimeCounter += 50;
             if(MyTimeCounter >= pauseTime*1000) {
-                MyTimeCounter = 0É
+                MyTimeCounter = 0;
                 idle = false;
                 waveInProgress = true;
             }
