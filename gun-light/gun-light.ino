@@ -22,9 +22,9 @@ CHSV hsv_exLeds[NUM__EX_LEDS];
 CHSV colors[NUM__COLORS];
 
 int currentColor = 3;
-int g_brightness = 144;
-int minBrightness = 16;
-int maxBrightness = 240;
+int g_brightness = 159;
+int minBrightness = 31;
+int maxBrightness = 255;
 int step = 32;
 
 bool running = false;
@@ -35,14 +35,14 @@ const char *ssid = "dva";
 WiFiServer server(80);
 
 void createColors() {
-    colors[0] = CHSV(0, 255, 225);
-    colors[1] = CHSV(32, 255, 225);
-    colors[2] = CHSV(64, 255, 225);
-    colors[3] = CHSV(96, 255, 225);
-    colors[4] = CHSV(128, 255, 225);
-    colors[5] = CHSV(160, 255, 225);
-    colors[6] = CHSV(192, 255, 225);
-    colors[7] = CHSV(224, 255, 225);
+    colors[0] = CHSV(0, 255, 100);
+    colors[1] = CHSV(32, 255, 100);
+    colors[2] = CHSV(64, 255, 100);
+    colors[3] = CHSV(96, 255, 100);
+    colors[4] = CHSV(128, 255, 100);
+    colors[5] = CHSV(160, 255, 100);
+    colors[6] = CHSV(192, 255, 100);
+    colors[7] = CHSV(224, 255, 100);
 }
 
 void reset(CHSV color){
