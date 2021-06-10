@@ -225,7 +225,7 @@ void pulseEffect() {
         }
     }
 }
-int time = 0;
+int MyTimeCounter = 0;
 void loop()
 {
     // if(running && millis() > 3 * 60 * 1000) {
@@ -246,9 +246,9 @@ void loop()
 
     EVERY_N_MILLISECONDS(10) {
         if(idle) {
-            time += 10;
-            if(time >= pauseTime*1000) {
-                time = 0;
+            MyTimeCounter += 10;
+            if(MyTimeCounter >= pauseTime*1000) {
+                MyTimeCounter = 0;
                 idle = false;
                 waveInProgress = true;
             }
