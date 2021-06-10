@@ -46,8 +46,8 @@ void createColors() {
 }
 
 void setup() {
-    FastLED.addLeds<NEOPIXEL, 33>(leds, NUM__LEDS);
-    FastLED.addLeds<NEOPIXEL, 32>(ex_leds, NUM__LEDS);
+    FastLED.addLeds<NEOPIXEL, 27>(leds, NUM__LEDS);
+    FastLED.addLeds<NEOPIXEL, 25>(ex_leds, NUM__LEDS);
 
     FastLED.setBrightness(g_brightness);
     FastLED.clear();
