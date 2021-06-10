@@ -231,7 +231,7 @@ void pulseEffect() {
 
 void loop()
 {
-    if(running && millis() > 3 * 60 * 1000) {
+    if(running && millis() > 1 * 60 * 1000) {
         shutDown();
     }
 
