@@ -109,19 +109,16 @@ void handleClient(WiFiClient client) {
                         client.println();
 
 
-                            client.print("<div style=\"display: flex; flex-direction: column; align-items: center; font-size: 6.5 rem;\">");
-
-                                client.print("<div style=\"width: 100%; display: flex; flex-direction: column; align-items: center;\">");
-                                    client.print("<p>Color <a href=\"/CH\">_UP_</a> </p>");
-                                    client.print("<p>Color <a href=\"/CL\">DOWN</a> </p>");
-                                client.print("</div>");
-
-                                client.print("<div style=\"width: 100%; display: flex; flex-direction: column; align-items: center;\">");
-                                    client.print("<p>Brightness <a href=\"/BH\">_UP_</a> </p>");
-                                    client.print("<p>Brightness <a href=\"/BL\">DOWN</a> </p>");
-                                client.print("</div>");
-
+                        client.print("<div style=\"display: flex; flex-direction: column; align-items: center; font-size: 6.5 rem;\">");
+                            client.print("<div style=\"width: 100%; display: flex; flex-direction: column; align-items: center;\">");
+                                client.print("<p>Color <a href=\"/CH\">_UP_</a> </p>");
+                                client.print("<p>Color <a href=\"/CL\">DOWN</a> </p>");
                             client.print("</div>");
+                            client.print("<div style=\"width: 100%; display: flex; flex-direction: column; align-items: center;\">");
+                                client.print("<p>Brightness <a href=\"/BH\">_UP_</a> </p>");
+                                client.print("<p>Brightness <a href=\"/BL\">DOWN</a> </p>");
+                            client.print("</div>");
+                        client.print("</div>");
 
                         // The HTTP response ends with another blank line:
                         client.println();
@@ -228,7 +225,7 @@ void pulseEffect() {
         }
     }
 }
-
+int time = 0;
 void loop()
 {
     // if(running && millis() > 3 * 60 * 1000) {
@@ -247,10 +244,15 @@ void loop()
         pulseEffect();
     }
 
-    if(idle) {
-        FastLED.delay(pauseTime*1000);
-        idle = false;
-        waveInProgress = true;
+    EVERY_N_MILLISECONDS(10) {
+        if(idle) {
+            time += 10;
+            if(time >= pauseTime*1000) {
+                time = 0;
+                idle = false;
+                waveInProgress = true;
+            }
+        }
     }
 
     copyToCRGB();
